@@ -15,8 +15,8 @@ Written and curated by Janez Krnc (github@janezk7), 25.02.2022
 - Dialog alert window system
 - Multilanguage support
 - Deeplinking functionality
-- Optional: Gltf viewer and manipulation
-- Optional: AR gltf model placing
+- *ComingSoon*: Gltf viewer and manipulation
+- *ComingSoon*: AR gltf model placing
 
 ## App Scenes:
 - MainApp Scene: Main app interface for navigating views, browsing item lists, searching, filtering and changing settings
@@ -362,11 +362,11 @@ testdeeplink://mylink?parameter
 
 ## 3d viewer
 The app has a class for loading glTF 3d models locally from the device or from and url. 
-*Under construction...*
+*Coming soon...*
 
 ## AR viewer
-*Under construction...*
+*Coming soon...*
 
 ## Known Issues and future improvements
-*Under construction...*
+*Coming soon...*
 
