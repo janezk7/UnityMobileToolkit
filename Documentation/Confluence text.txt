@@ -1,0 +1,11 @@
+Unity Mobile App Template
+V okviru projekta Lighting Online AR za podjetje Forma Svetila smo razvili moderno mobilno aplikacijo za Android in iOS naprave v Unity. 
+Glavna atrakcija aplikacije je bila postavitev 3d modelov v AR prostor. 
+Tekom projekta se je kompleksnost aplikacije povečala in potrebna je bila implementacija mnogo modernih mobile app funkcionalnosti.
+Te funkcionalnosti smo refaktorirali in zbrali v template projekt, kjer so le-te demonstrirane in dokumentirane v namen pouporabe v prihodnje. 
+Funkcionalnosti v grobem:
+- [enumerated]
+
+GIT repozitorij Unity projekta
+
+Dokumentacija

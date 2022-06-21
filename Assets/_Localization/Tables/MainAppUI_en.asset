@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: MainAppUI_en
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: en
+  m_SharedData: {fileID: 11400000, guid: f65e7e28a8c05164dbf8ddd000626934, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 40792915968
+    m_Localized: Back
+    m_Metadata:
+      m_Items: []
+  - m_Id: 12652196823040
+    m_Localized: Welcome english user!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 47087059369984
+    m_Localized: No products found for your criteria
+    m_Metadata:
+      m_Items: []
+  - m_Id: 47449136857088
+    m_Localized: Okay
+    m_Metadata:
+      m_Items: []
+  - m_Id: 47806923571200
+    m_Localized: Sort by
+    m_Metadata:
+      m_Items: []
+  - m_Id: 47981628915712
+    m_Localized: Filter items
+    m_Metadata:
+      m_Items: []
+  - m_Id: 51264464519168
+    m_Localized: Search by item
+    m_Metadata:
+      m_Items: []
+  - m_Id: 358251018338304
+    m_Localized: Reset App
+    m_Metadata:
+      m_Items: []
+  - m_Id: 358368500793344
+    m_Localized: Data cleared.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 359638385049600
+    m_Localized: About
+    m_Metadata:
+      m_Items: []
+  - m_Id: 359847861174272
+    m_Localized: No settings yet.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 359939192143872
+    m_Localized: App Settings
+    m_Metadata:
+      m_Items: []
+  - m_Id: 360050362171392
+    m_Localized: Language
+    m_Metadata:
+      m_Items: []
+  - m_Id: 396486297796608
+    m_Localized: "Name \u2191"
+    m_Metadata:
+      m_Items: []
+  - m_Id: 396721162043392
+    m_Localized: "Name \u2193"
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 1
