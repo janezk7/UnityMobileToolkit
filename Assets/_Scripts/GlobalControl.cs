@@ -9,17 +9,6 @@ using UnityEngine;
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
 
-public class ItemSimple
-{
-    public string Name { get; set; }
-    public string Description { get; set; }
-
-    public override string ToString()
-    {
-        return Name;
-    }
-}
-
 public class GlobalControl : MonoBehaviour
 {
     public static GlobalControl Instance;
@@ -27,9 +16,9 @@ public class GlobalControl : MonoBehaviour
     [Header("Settings")]
     public UserSettings DefaultSettings;
     // Global app config
-    public bool UseExternalAppConfig = false;
-    public string ExternalAppConfigUrl = "https://www.sampleapi.si/files/ConfigFile.json";
-    public bool RequireInternetConnection = false;
+    public bool UseExternalAppConfig;
+    public string ExternalAppConfigUrl;
+    public bool RequireInternetConnection;
 
     [Header("Managers")]
     public ErrorManager ErrorManager;
@@ -38,8 +27,8 @@ public class GlobalControl : MonoBehaviour
     public bool MockConfigFileFromResources = false;
 
     // Deep linking
-    public bool MockDeepLink = false;
-    public string MockDeepLinkUrl = "intentScheme://productdetails?371";
+    public bool MockDeepLink;
+    public string MockDeepLinkUrl;
 
     private string deeplinkURL;
     private bool _isAppConfigInitialized = false;
@@ -51,11 +40,6 @@ public class GlobalControl : MonoBehaviour
 
     // Localization 
     public UnityEngine.Localization.Tables.StringTable CurrentStringTable { get; set; }
-
-    // Cache
-    public (int categoryId, List<ItemSimple> Items) ItemsCache { get; set; }
-    public List<Category> CategoriesCache { get; set; } // Sample cache
-    // ... insert your caches
 
     public string VideoCacheDirectory => Application.persistentDataPath + "/Videos";
 
@@ -74,9 +58,6 @@ public class GlobalControl : MonoBehaviour
     #region Images Cache
     private List<(string imageUrl, Sprite sprite)> ImagesCache { get; set; } = new List<(string imageUrl, Sprite sprite)>();
     #endregion
-
-
-
 
     // TODO refactor to util class
     public static int ConvertAppVersionNumeric(string appVersion)
@@ -250,103 +231,6 @@ public class GlobalControl : MonoBehaviour
     /* Load methods */
     //
 
-    // Sample items loading method
-    public IEnumerator LoadAndCacheItems(ApiQueryObject apiQueryObject, bool clearCache = false)
-    {
-        // Clear cache if using a search string
-        if (clearCache || apiQueryObject.SearchString != null)
-            ClearCache();
-
-        // Check if cache is ok and if it exsits (must check passed filter object first to know if we can use cache)
-        bool isCacheOk = true && apiQueryObject.SearchString == null; // 
-        bool itemsCacheExists = ItemsCache.Items != null && isCacheOk;
-        if (itemsCacheExists)
-            yield break;
-
-        // TODO: Load items implemetation
-
-        #region Example of loading
-        /*
-        var cd = new CoroutineWithData(this, API.Instance.GetItems(filterdata));
-        yield return cd.coroutine;
-        var apiResponse = cd.result as ApiResponse;
-        if (!apiResponse.Ok)
-        {
-            Debug.Log("Error fetching items: " + apiResponse.ErrorMessage);
-            var cdMessage = new CoroutineWithData(this, GetLocalizedString("Items_fetch_error"));
-            yield return cdMessage.coroutine;
-            var cdReload = new CoroutineWithData(this, GetLocalizedString("Reload"));
-            yield return cdReload.coroutine;
-
-            var errorMessage = (string)cdMessage.result + (UserSettings.ShowVerboseMessages ? $": {apiResponse.ErrorMessage}" : "");
-            yield return ErrorManager.ShowError(errorMessage, (string)cdReload.result, () =>
-            {
-                var searchViewManager = FindObjectOfType<SearchViewManager>();
-                if (searchViewManager.IsOverlayShown)
-                {
-                    searchViewManager.TriggerSearch();
-                    return;
-                }
-
-                FindObjectOfType<InterfaceInteraction>().NavigateToGallery();
-            });
-            yield break;
-        }
-        */
-        #endregion
-
-        // Mocked data
-        var category = 1;
-        var itemList = new List<ItemSimple>()
-        {
-            new ItemSimple() { Name = "Item 1", Description = "Sample description" },
-            new ItemSimple() { Name = "Item 2", Description = "Sample desctiption" },
-            new ItemSimple() { Name = "Item 3", Description = "Sample desctiption" },
-            new ItemSimple() { Name = "Item 4", Description = "Sample desctiption" },
-            new ItemSimple() { Name = "Item 5", Description = "Sample desctiption" },
-            new ItemSimple() { Name = "Item 6", Description = "Sample desctiption" }
-        };
-
-        // Mock filtering
-        if(!string.IsNullOrEmpty(apiQueryObject.SearchString))
-        {
-            var ss = apiQueryObject.SearchString.ToLower();
-            itemList = itemList.FindAll(x => x.Name.ToLower().Contains(ss));
-        }
-
-
-        ItemsCache = (category, itemList);
-    }
-
-    // Sample load method
-    public IEnumerator LoadAndCacheCategories(bool clearCache = false)
-    {
-
-        if (clearCache)
-            ClearCache();
-
-        bool isDataCached = CategoriesCache != null;
-        if (isDataCached)
-            yield break;
-
-        var cd = new CoroutineWithData(this, API.Instance.GetCategoryList());
-        yield return cd.coroutine;
-        var apiResponse = cd.result as ApiResponse;
-        if (!apiResponse.Ok)
-        {
-            Debug.Log("Error fetching categories: " + apiResponse.ErrorMessage);
-            var cdMessage = new CoroutineWithData(this, GetLocalizedString("Categories_fetch_error"));
-            yield return cdMessage.coroutine;
-
-            var errorMessage = (string)cdMessage.result + (UserSettings.ShowVerboseMessages ? $": {apiResponse.ErrorMessage}" : "");
-            yield return ErrorManager.ShowError(errorMessage, reloadApp: true );
-            yield break;
-        }
-
-        // Cache categories
-        CategoriesCache = (apiResponse.Data as Category[]).ToList();
-    }
-
     public IEnumerator LoadAndCacheImage(string imageUrl, int? height, bool cacheImage = true, bool clearImageCache = false)
     {
         if (clearImageCache)
@@ -405,22 +289,19 @@ public class GlobalControl : MonoBehaviour
         Debug.Log("User settings initialized!");
     }
 
-    // Clear all caches
+    #region Cache Management
     public void ClearCache()
     {
-        ClearCategoryCache();
+        DependancyProvider.Services.AssetService.ClearCache();
         ClearImageCache();
-    }
-
-    public void ClearCategoryCache()
-    {
-        CategoriesCache = null;
     }
 
     public void ClearImageCache()
     {
         ImagesCache.Clear();
     }
+
+    #endregion
 
     private IEnumerator GetLocalizedString(string key)
     {

@@ -1,8 +1,11 @@
+using Assets._Scripts.Entities;
 using Assets.Scripts.Classes;
+using Assets.Scripts.Util;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Localization;
 
 /// <summary>
 /// Sample view for loading and populating items
@@ -16,6 +19,10 @@ public class ItemGalleryManager : ViewManager
     public Transform ItemList;
     public LoadingScript LoadingManager;
     public GameObject NoItemsContent;
+
+    [Header("Localization")]
+    public LocalizedString AssetsFetchErrorLocalizedString;
+    public LocalizedString ReloadLocalizedString;
 
     [Header("Prefabs")]
     public GameObject ItemCard;
@@ -48,6 +55,11 @@ public class ItemGalleryManager : ViewManager
         ClearProductCards();
     }
 
+    public void RefreshItems()
+    {
+        StartCoroutine(LoadAndPopulate(new FilterObject(null, null)));
+    }
+
     public IEnumerator LoadAndPopulate(FilterObject filterObject)
     {
         LoadingManager.BeginLoading();
@@ -59,12 +71,38 @@ public class ItemGalleryManager : ViewManager
         ClearProductCards();
         NoItemsContent.SetActive(false);
 
-        // Load and cache item data in GlobalControl
-        yield return StartCoroutine(GlobalControl.Instance.LoadAndCacheItems(filterObject.ApiQueryObject));
+        // Load and cache item data in AssetService
+        yield return StartCoroutine(LoadItems(filterObject.ApiQueryObject));
 
         // Populate cached items in GlobalControl
         yield return StartCoroutine(PopulateItemList(filterObject.ManualFilterObject));
         LoadingManager.EndLoading();
+    }
+
+    private IEnumerator LoadItems(ApiQueryObject queryObject)
+    {
+        var cd = new CoroutineWithData(this, DependancyProvider.Services.AssetService.GetAssets(this, queryObject));
+        yield return cd.coroutine;
+        var apiResponse = cd.result as ApiResponse;
+        if (!apiResponse.Ok)
+        {
+            Debug.Log("Error fetching items: " + apiResponse.ErrorMessage);
+            var assetsFetchErrorMessage = AssetsFetchErrorLocalizedString.GetLocalizedString();
+            var errorMessage = assetsFetchErrorMessage + (GlobalControl.Instance.UserSettings.ShowVerboseMessages ? $": {apiResponse.ErrorMessage}" : "");
+            yield return GlobalControl.Instance.ErrorManager.ShowError(errorMessage, ReloadLocalizedString.GetLocalizedString(), () =>
+            {
+                var searchViewManager = FindObjectOfType<SearchViewManager>();
+                if (searchViewManager.IsOverlayShown)
+                {
+                    searchViewManager.TriggerSearch();
+                    return;
+                }
+
+                RefreshItems();
+            });
+        }
+
+        DependancyProvider.Services.AssetService.AssetsCache = (List<Asset>)apiResponse.Data;
     }
 
     private void ClearProductCards()
@@ -76,7 +114,7 @@ public class ItemGalleryManager : ViewManager
 
     private IEnumerator PopulateItemList(ManualFilterObject filterObject)
     {
-        var items = GlobalControl.Instance.ItemsCache.Items;
+        var items = DependancyProvider.Services.AssetService.AssetsCache;
 
         if(items is null)
         {

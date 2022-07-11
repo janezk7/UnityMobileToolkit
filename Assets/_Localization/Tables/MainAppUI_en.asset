@@ -78,5 +78,21 @@ MonoBehaviour:
     m_Localized: "Name \u2193"
     m_Metadata:
       m_Items: []
+  - m_Id: 60454086418743296
+    m_Localized: Invalid config file. Missing api endpoint.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 60454103288233984
+    m_Localized: Could not get config file. Please try again later.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67362170552946688
+    m_Localized: Reload
+    m_Metadata:
+      m_Items: []
+  - m_Id: 67362245081534464
+    m_Localized: Failed to get assets.
+    m_Metadata:
+      m_Items: []
   references:
     version: 1

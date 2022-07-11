@@ -38,5 +38,9 @@ MonoBehaviour:
     m_Localized: "Naziv \u2193"
     m_Metadata:
       m_Items: []
+  - m_Id: 67362170552946688
+    m_Localized: "Osve\u017Ei"
+    m_Metadata:
+      m_Items: []
   references:
     version: 1

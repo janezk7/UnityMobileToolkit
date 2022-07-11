@@ -72,18 +72,18 @@ namespace Assets.Scripts.Util
     {
         public static API Instance;
 
-        public string apiDomain_prod = "TODO:azureDomainUrl";
-
+        [SerializeField]
+        private string apiDomain_prod = "TODO:azureDomainUrl";
+        [SerializeField]
         public bool UseMockServer;
-
-        //public string apiDomain_mock = "http://localhost:8080";
-        public string apiDomain_mock = "http://ebac-176-76-242-251.ngrok.io";
-        public string ApiDomain => UseMockServer ? apiDomain_mock : apiDomain_prod;
+        [SerializeField]
+        private string apiDomain_mock = "http://ebac-176-76-242-251.ngrok.io";
 
         private Dictionary<string, string> ApiHeaders;
 
-        private string ApiKeyConfigDirectory => ApiDomain + "/configs";
+        public string ApiDomain => UseMockServer ? apiDomain_mock : apiDomain_prod;
         private string FileDirectory => ApiDomain + "/files"; // Directory for files 
+        private string ApiKeyConfigDirectory => ApiDomain + "/configs";
 
         private void Awake()
         {
@@ -96,6 +96,8 @@ namespace Assets.Scripts.Util
             {
                 Destroy(gameObject);
             }
+
+            ApiHeaders = new Dictionary<string, string>();
         }
 
         /// <summary>
@@ -177,33 +179,6 @@ namespace Assets.Scripts.Util
         }
 
         /// <summary>
-        /// Sample Get request to API
-        /// </summary>
-        public IEnumerator GetCategoryList()
-        {
-            var endpoint = string.Format("{0}/{1}", FileDirectory, "categories");
-            if (UseMockServer)
-                endpoint = string.Format("{0}/categories_mock.json", FileDirectory);
-            var cd = new CoroutineWithData(this, GetHttpResponse(endpoint));
-            yield return cd.coroutine;
-            var response = cd.result as HttpResponse;
-
-            if (!response.IsSuccessful)
-            {
-                yield return new ApiResponse() { ErrorMessage = response.HttpError };
-                yield break;
-            }
-
-            // Wrap content in a single parent json key if necessary
-            //  var jsonObjectFix = string.Format("{{\"categories\": {0} }}", response.JsonText);
-
-            // Deserialize and return 
-            CategoryWrapper categories = JsonUtility.FromJson<CategoryWrapper>(response.JsonText);
-
-            yield return new ApiResponse() { Data = categories.categories };
-        }
-
-        /// <summary>
         /// Load image from url as texture
         /// </summary>
         public IEnumerator LoadAndGetImage(string imageUrl)
@@ -237,7 +212,7 @@ namespace Assets.Scripts.Util
             yield return new ApiResponse() { Data = response.RawData };
         }
 
-        private IEnumerator GetHttpResponse(string endpoint)
+        public IEnumerator GetHttpResponse(string endpoint)
         {
             while (!GlobalControl.Instance.IsUserSettingsInitialized)
                 yield return null;

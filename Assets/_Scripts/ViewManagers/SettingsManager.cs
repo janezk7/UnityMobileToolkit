@@ -22,7 +22,6 @@ public class SettingsManager : MonoBehaviour, IView
     {
         InterfaceInteraction.Instance.ShowBackButton();
         var userSettings = GlobalControl.Instance.UserSettings;
-        StartCoroutine(RefreshSettings(false));
 
         UpdateLanguageUI();
 
@@ -38,7 +37,6 @@ public class SettingsManager : MonoBehaviour, IView
     public void SetLanguage(int localeIndex)
     {
         GlobalControl.Instance.UserSettings.SetLocale(localeIndex);
-        StartCoroutine(RefreshSettings(updateLocalizationTable: true));
 
         UpdateLanguageUI();
     }
@@ -52,13 +50,6 @@ public class SettingsManager : MonoBehaviour, IView
         GlobalControl.Instance.InitializeUserSettings();
         InitView();
         ClearAppDataText.SetActive(true);
-    }
-
-    private IEnumerator RefreshSettings(bool updateLocalizationTable)
-    {
-        if(updateLocalizationTable)
-            yield return StartCoroutine(InterfaceInteraction.Instance.UpdateCurrentLocalizationTable());
-        yield break;
     }
 
     private void UpdateLanguageUI()

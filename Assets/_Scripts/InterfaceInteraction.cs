@@ -37,10 +37,6 @@ public class InterfaceInteraction : MonoBehaviour
     public GameObject CurrentViewObject;
     public GameObject[] ViewsArray;
 
-    [Header("Localization")]
-    [SerializeField]
-    private LocalizedStringTable localizedStringTable;
-
     [Header("Debug fields")]
     public TMPro.TextMeshProUGUI DebugText;
 
@@ -95,15 +91,11 @@ public class InterfaceInteraction : MonoBehaviour
         if(DebugText != null)
             DebugText.enabled = isDebugMode;
 
-        // WORKFLOW
-        // 1. Global control: starts, loads user settings, waits for InterfaceInteraction to UpdateCurrentLocalizationTable
-        // 2. Interface Interaction: starts, updates current localization table and waits for App to be initialized from GlobalControl
-        // 3. Global control: Initializes app, shows connection errors, loads AppConfig file from server, initializes API, checks if update is needed
-        // 4.a Interface Interaction: Show LanguageSelector if first time run
-        // 4.b LanguageSelector: On select, handle deep link or start app normally
-
-        // Get localization table reference
-        yield return StartCoroutine(UpdateCurrentLocalizationTable());
+        // WORKFLOW: TODO: UPDATE
+        // 1. Global control: starts, loads user settings, waits for InterfaceInteraction
+        // 2. Global control: Initializes app, shows connection errors, loads AppConfig file from server, initializes API, checks if update is needed
+        // 3.a Interface Interaction: Show LanguageSelector if first time run
+        // 3.b LanguageSelector: On select, handle deep link or start app normally
 
         // Wait for app initialization
         while (!GlobalControl.Instance.IsAppConfigInitialized)
@@ -177,16 +169,6 @@ public class InterfaceInteraction : MonoBehaviour
         
         var previousView = NavigationHistory.Pop();
         NavigateToView(previousView, pushHistory: false);
-    }
-
-    public IEnumerator UpdateCurrentLocalizationTable()
-    {
-        while (!GlobalControl.Instance.IsUserSettingsInitialized)
-            yield return null;
-        CurrentStringTable = localizedStringTable.GetTable();
-
-        // TODO: Update UI if necessary
-
     }
 
     public void UpdateDebugText(string text)

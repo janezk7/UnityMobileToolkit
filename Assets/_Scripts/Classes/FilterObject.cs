@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Assets.Scripts.Classes
 {
-    // Sample Filter object 
+    /// <summary>
+    /// Filter object with query fields and filter fields
+    /// </summary>
     public class FilterObject
     {
         public ApiQueryObject ApiQueryObject { get; private set; } // Filter object to be sent to api
@@ -24,15 +26,23 @@ namespace Assets.Scripts.Classes
         }
     }
 
+    /// <summary>
+    /// This object will be sent to the api
+    /// </summary>
     public class ApiQueryObject
     {
-        // TODO: Add other query fields 
+        // TODO: Add other api query fields 
+        //....
         public string SearchString { get; set; }
     }
 
+    /// <summary>
+    /// Use this object for client-side filtering
+    /// </summary>
     public class ManualFilterObject
     {
-        // TODO: Add other query fields 
+        // TODO: Add other filter fields 
+        //....
         public FilterManager.SortType? SortType { get; set; }
 
         public bool HasFilter => SortType.HasValue;
