@@ -19,5 +19,19 @@ namespace Assets._Scripts.Entities
         public string Name;
         public string Description;
         public string ImageUrl;
+
+        public AssetImage[] PictureList;
+        public AssetSpecification[] SpecificationList;
+    }
+
+    public class AssetImage
+    {
+        public string PictureUrl;
+    }
+
+    public class AssetSpecification
+    {
+        public string Specification;
+        public string Value;
     }
 }

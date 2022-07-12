@@ -14,10 +14,30 @@ namespace Assets._Scripts.Services.AssetService
     public class AssetServiceMock : IAssetService
     {
         public List<Asset> AssetsCache { get; set; }
+        public Asset AssetCache { get; set; }
 
         public void ClearCache()
         {
             AssetsCache?.Clear();
+            AssetCache = null;
+        }
+
+        public IEnumerator GetAssetDetails(MonoBehaviour monoBehaviour, int assetId, bool clearCache = false)
+        {
+            var asset = new Asset()
+            {
+                Id = 1,
+                Name = "Item 1",
+                Description = "Product description...",
+                PictureList = new AssetImage[] 
+                {
+                    new AssetImage() { PictureUrl = "https://cdn-icons-png.flaticon.com/512/616/616554.png" },
+                    new AssetImage() { PictureUrl = "https://cdn-icons-png.flaticon.com/512/616/616554.png" },
+                    new AssetImage() { PictureUrl = "https://cdn-icons-png.flaticon.com/512/616/616554.png" }
+                }
+            };
+
+            yield return new ApiResponse() { Data = asset };
         }
 
         public IEnumerator GetAssets(MonoBehaviour monoBehaviour, ApiQueryObject apiQueryObject, bool clearCache = false)

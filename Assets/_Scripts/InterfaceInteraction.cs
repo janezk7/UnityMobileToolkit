@@ -48,11 +48,12 @@ public class InterfaceInteraction : MonoBehaviour
         ViewNavigation = 2,
         UIUX = 3,
         DataLoading = 4,
-        SearchFilter = 5,
-        Sidemenu = 6,
-        ErrorDialog = 7,
-        Localization = 8,
-        Model3d = 9
+        Details = 5,
+        SearchFilter = 6,
+        Sidemenu = 7,
+        ErrorDialog = 8,
+        Localization = 9,
+        Model3d = 10
         // TODO: Add your views
     };
 
@@ -63,7 +64,7 @@ public class InterfaceInteraction : MonoBehaviour
         private set { GlobalControl.Instance.CurrentStringTable = value; } 
     }
 
-    public AppView CurrentView { get; set; }
+    public AppView CurrentView;
     public Stack<AppView> NavigationHistory { get; private set; }
 
 
@@ -82,7 +83,7 @@ public class InterfaceInteraction : MonoBehaviour
         NavigationHistory = new Stack<AppView>();
     }
 
-    public IEnumerator Start()
+    public IEnumerator Startup()
     {
         GlobalControl.Instance.ErrorManager = ErrorManager;
 
@@ -198,6 +199,10 @@ public class InterfaceInteraction : MonoBehaviour
     public void NavigateToDataLoading()
     {
         NavigateToView(AppView.DataLoading);
+    }
+    public void NavigateToDetails()
+    {
+        NavigateToView(AppView.Details);
     }
     public void NavigateToSearchFilter()
     {

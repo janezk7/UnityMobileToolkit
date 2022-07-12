@@ -11,8 +11,10 @@ namespace Assets._Scripts.Services.AssetService
     public interface IAssetService
     {
         public List<Asset> AssetsCache { get; set; }
+        public Asset AssetCache { get; set; }
         public void ClearCache();
         public IEnumerator GetAssets(MonoBehaviour monoBehaviour, ApiQueryObject apiQueryObject, bool clearCache = false);
+        public IEnumerator GetAssetDetails(MonoBehaviour monoBehaviour, int assetId, bool clearCache = false);
     }
 
     public class AssetService : IAssetService
@@ -30,6 +32,7 @@ namespace Assets._Scripts.Services.AssetService
 
         // Data caches
         public List<Asset> AssetsCache { get; set; }
+        public Asset AssetCache { get; set; }
 
         public AssetService() { }
         ~AssetService() { ClearCache(); }
@@ -37,6 +40,7 @@ namespace Assets._Scripts.Services.AssetService
         public void ClearCache()
         {
             AssetsCache?.Clear();
+            AssetCache = null;
         }
 
         /// <summary>
@@ -76,6 +80,33 @@ namespace Assets._Scripts.Services.AssetService
             var assets = JsonUtility.FromJson<AssetsWrapper>(response.JsonText);
 
             yield return new ApiResponse() { Data = assets.assets };
+        }
+
+        public IEnumerator GetAssetDetails(MonoBehaviour monoBehaviour, int assetId, bool clearCache = false)
+        {
+            if (clearCache)
+                ClearCache();
+
+            bool isCacheOk = AssetCache != null && AssetCache.Id == assetId;
+            if (isCacheOk)
+            {
+                yield return new ApiResponse() { Data = AssetCache };
+                yield break;
+            }
+
+            var api = API.Instance;
+            var endpoint = string.Format("{0}/{1}?assetId={3}", api.ApiDomain, "assetDetails", assetId);
+            var cd = new CoroutineWithData(monoBehaviour, api.GetHttpResponse(endpoint));
+            yield return cd.coroutine;
+            var response = cd.result as HttpResponse;
+            if (!response.IsSuccessful)
+            {
+                yield return new ApiResponse() { ErrorMessage = response.HttpError };
+                yield break;
+            }
+
+            var asset = JsonUtility.FromJson<Asset>(response.JsonText);
+            yield return new ApiResponse() { Data = asset };
         }
     }
 }

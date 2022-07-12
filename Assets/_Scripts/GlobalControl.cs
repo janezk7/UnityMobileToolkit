@@ -191,6 +191,7 @@ public class GlobalControl : MonoBehaviour
 
             API.Instance.SetApiEndpoint(AppConfiguration.apiEndpoint);
 
+            StartCoroutine(InterfaceInteraction.Instance.Startup());
         }
 
         // Register deep linking
