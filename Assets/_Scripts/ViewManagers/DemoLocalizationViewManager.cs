@@ -18,7 +18,6 @@ public class DemoLocalizationViewManager : ViewManager
         StartCoroutine(UpdateLocalizedString());
     }
 
-
     private void UpdateLocaleText()
     {
         SelectedLanguageValue.text = LocalizationSettings.SelectedLocale.LocaleName;

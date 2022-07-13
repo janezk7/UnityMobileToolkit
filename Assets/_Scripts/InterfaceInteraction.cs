@@ -83,7 +83,7 @@ public class InterfaceInteraction : MonoBehaviour
         NavigationHistory = new Stack<AppView>();
     }
 
-    public IEnumerator Startup()
+    public IEnumerator Start()
     {
         GlobalControl.Instance.ErrorManager = ErrorManager;
 

@@ -1,3 +1,4 @@
+using Assets._Scripts.Classes;
 using Assets.Scripts.Classes;
 using Assets.Scripts.Util;
 using System;
@@ -131,7 +132,7 @@ public class GlobalControl : MonoBehaviour
             else
             {
                 // Get app config file
-                var cd = new CoroutineWithData(this, API.GetServerJson(ExternalAppConfigUrl));
+                var cd = new CoroutineWithData(this, DependancyProvider.Services.ApiService.GetServerJson(ExternalAppConfigUrl));
                 yield return cd.coroutine;
                 var httpResponse = cd.result as HttpResponse;
 
@@ -189,9 +190,7 @@ public class GlobalControl : MonoBehaviour
                 yield break;
             }
 
-            API.Instance.SetApiEndpoint(AppConfiguration.apiEndpoint);
-
-            StartCoroutine(InterfaceInteraction.Instance.Startup());
+            DependancyProvider.Services.ApiService.SetApiEndpoint(AppConfiguration.apiEndpoint);
         }
 
         // Register deep linking
@@ -244,7 +243,7 @@ public class GlobalControl : MonoBehaviour
             yield break;
         }
 
-        var cd = new CoroutineWithData(this, API.Instance.LoadAndGetImage(imageUrl));
+        var cd = new CoroutineWithData(this, DependancyProvider.Services.ApiService.LoadAndGetImage(imageUrl));
         yield return cd.coroutine;
         var response = cd.result as ApiResponse;
         if(!response.Ok)

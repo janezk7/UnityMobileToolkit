@@ -5,6 +5,7 @@ using Assets.Scripts.Util;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Classes;
+using Assets._Scripts.Classes;
 
 namespace Assets._Scripts.Services.AssetService
 {
@@ -64,7 +65,7 @@ namespace Assets._Scripts.Services.AssetService
                 yield break;
             }
 
-            var api = API.Instance;
+            var api = DependancyProvider.Services.ApiService;
             var queryString = apiQueryObject.SearchString;
             var endpoint = string.Format("{0}/{1}&query={2}", api.ApiDomain, "modelProducts", queryString);
             var cd = new CoroutineWithData(monoBehaviour, api.GetHttpResponse(endpoint));
@@ -94,7 +95,7 @@ namespace Assets._Scripts.Services.AssetService
                 yield break;
             }
 
-            var api = API.Instance;
+            var api = DependancyProvider.Services.ApiService;
             var endpoint = string.Format("{0}/{1}?assetId={3}", api.ApiDomain, "assetDetails", assetId);
             var cd = new CoroutineWithData(monoBehaviour, api.GetHttpResponse(endpoint));
             yield return cd.coroutine;

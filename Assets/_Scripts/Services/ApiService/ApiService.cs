@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Assets._Scripts.Classes;
+using Assets.Scripts.Util;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -9,94 +11,31 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Video;
 
-namespace Assets.Scripts.Util
+namespace Assets._Scripts.Services.ApiService
 {
-    public class HttpResponse
+    public interface IApiService
     {
-        public string JsonText;
-        public Texture2D Texture;
-        public byte[] RawData;
-        public bool IsSuccessful;
-        public string HttpError;
-
-        public HttpResponse(string data)
-        {
-            JsonText = data;
-            Texture = null;
-            IsSuccessful = true;
-            HttpError = null;
-        }
-
-        public HttpResponse(Texture2D data)
-        {
-            JsonText = null;
-            Texture = data;
-            IsSuccessful = true;
-            HttpError = null;
-        }
-
-        public HttpResponse(byte[] data)
-        {
-            RawData = data;
-            JsonText = null;
-            Texture = null;
-            IsSuccessful = true;
-            HttpError = null;
-        }
-
-        public HttpResponse(bool isSuccessful, string data, string errorMessage = null)
-        {
-            JsonText = data;
-            Texture = null;
-            IsSuccessful = isSuccessful;
-            HttpError = errorMessage;
-        }
-
-        public HttpResponse(bool isSuccessful, Texture2D data, string errorMessage = null)
-        {
-            JsonText = null;
-            Texture = data;
-            IsSuccessful = isSuccessful;
-            HttpError = errorMessage;
-        }
+        public bool UseMockServer { get; set; }
+        public string ApiDomain { get; }
+        public void SetApiEndpoint(string endpoint);
+        public IEnumerator GetServerJson(string endpoint);
+        public IEnumerator GetHttpResponse(string endpoint);
+        public IEnumerator LoadAndGetImage(string imageUrl);
     }
 
-    public class ApiResponse
+    public class ApiService : IApiService
     {
-        public object Data;
-        public string ErrorMessage;
-        public bool Ok { get { return ErrorMessage == null; } }
-    }
-
-    public class API : MonoBehaviour
-    {
-        public static API Instance;
-
-        [SerializeField]
         private string apiDomain_prod = "TODO:azureDomainUrl";
-        [SerializeField]
-        public bool UseMockServer;
-        [SerializeField]
+        public bool UseMockServer { get; set; } = false;
         private string apiDomain_mock = "http://ebac-176-76-242-251.ngrok.io";
 
         private Dictionary<string, string> ApiHeaders;
 
         public string ApiDomain => UseMockServer ? apiDomain_mock : apiDomain_prod;
-        private string FileDirectory => ApiDomain + "/files"; // Directory for files 
         private string ApiKeyConfigDirectory => ApiDomain + "/configs";
 
-        private void Awake()
+        public ApiService()
         {
-            if (Instance == null)
-            {
-                DontDestroyOnLoad(gameObject);
-                Instance = this;
-            }
-            else if (Instance != this)
-            {
-                Destroy(gameObject);
-            }
-
             ApiHeaders = new Dictionary<string, string>();
         }
 
@@ -124,7 +63,7 @@ namespace Assets.Scripts.Util
         /// </summary>
         /// <param name="endpoint">Full endpoint url</param>
         /// <returns>HttpResponse object</returns>
-        public static IEnumerator GetServerJson(string endpoint)
+        public IEnumerator GetServerJson(string endpoint)
         {
             Debug.Log("GET Server Json " + endpoint);
             using (UnityWebRequest webRequest = UnityWebRequest.Get(endpoint))
@@ -183,7 +122,7 @@ namespace Assets.Scripts.Util
         /// </summary>
         public IEnumerator LoadAndGetImage(string imageUrl)
         {
-            var cd = new CoroutineWithData(this, GetTextureRequest(imageUrl));
+            var cd = new CoroutineWithData(GlobalControl.Instance, GetTextureRequest(imageUrl));
             yield return cd.coroutine;
             var response = cd.result as HttpResponse;
             if(!response.IsSuccessful)
@@ -200,7 +139,7 @@ namespace Assets.Scripts.Util
         /// </summary>
         public IEnumerator LoadAndGetByteData(string fileUrl)
         {
-            var cd = new CoroutineWithData(this, GetByteDataRequest(fileUrl));
+            var cd = new CoroutineWithData(GlobalControl.Instance, GetByteDataRequest(fileUrl));
             yield return cd.coroutine;
             var response = cd.result as HttpResponse;
             if (!response.IsSuccessful)
@@ -220,7 +159,7 @@ namespace Assets.Scripts.Util
             if(!UseMockServer)
                 endpoint += string.Format("&languageid={0}", languageId);
 
-            var cd = new CoroutineWithData(this, GetRequest(endpoint));
+            var cd = new CoroutineWithData(GlobalControl.Instance, GetRequest(endpoint));
             yield return cd.coroutine;
             yield return cd.result;
         }

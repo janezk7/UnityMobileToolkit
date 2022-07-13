@@ -1,4 +1,5 @@
 using Assets._Scripts.Services;
+using Assets._Scripts.Services.ApiService;
 using Assets._Scripts.Services.AssetService;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,9 +21,11 @@ public class DependancyProvider
     public DependancyProvider()
     {
         // Register services here
-        AssetService = new Assets._Scripts.Services.AssetService.AssetServiceMock();
+        ApiService = new ApiService();
+        AssetService = new AssetServiceMock();
     }
 
     // Services
+    public IApiService ApiService;
     public IAssetService AssetService;
 }

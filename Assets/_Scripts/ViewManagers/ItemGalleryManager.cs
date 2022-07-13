@@ -1,3 +1,4 @@
+using Assets._Scripts.Classes;
 using Assets._Scripts.Entities;
 using Assets.Scripts.Classes;
 using Assets.Scripts.Util;

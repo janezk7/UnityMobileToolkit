@@ -1,3 +1,4 @@
+using Assets._Scripts.Classes;
 using Assets._Scripts.Entities;
 using Assets.Scripts.Util;
 using System.Collections;
@@ -18,7 +19,6 @@ public class DemoDetailsViewManager : ViewManager
     public Transform SpecificationListContainer;
 
     [Header("Prefabs")]
-    public GameObject ImageCard;
     //public GameObject SpecificationCard;
     public GameObject ListSeperator;
 
