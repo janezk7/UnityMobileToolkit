@@ -8,6 +8,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Scenes/MainInterface.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/_Scenes/ModelViewer.unity
+    guid: 4c9d08598bcfca141b8609a29e1b0f10
   m_configObjects:
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: c4897ef1a86240c4d8eb3a5e056cf1b9, type: 2}
+    UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: f170c5f63a6359546aabc2f428ba68a7, type: 2}
     com.unity.addressableassets: {fileID: 11400000, guid: 254747c9b3d350141bd802b4a290311b, type: 2}
     com.unity.localization.settings: {fileID: 11400000, guid: 8dde24822cc45d843bc6a77f9825266e, type: 2}

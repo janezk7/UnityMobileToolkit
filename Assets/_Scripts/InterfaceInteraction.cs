@@ -222,7 +222,7 @@ public class InterfaceInteraction : MonoBehaviour
     }
     public void NavigateToModel3d()
     {
-        // TODO: move 3d model viewer. 
+        SceneManager.LoadScene("ModelViewer");
     }
     public void NavigateToLanguageSelector()
     {

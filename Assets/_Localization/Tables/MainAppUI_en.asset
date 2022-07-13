@@ -94,5 +94,10 @@ MonoBehaviour:
     m_Localized: Failed to get assets.
     m_Metadata:
       m_Items: []
+  - m_Id: 359499884937216
+    m_Localized: Reset
+    m_Metadata:
+      m_Items: []
   references:
-    version: 1
+    version: 2
+    RefIds: []

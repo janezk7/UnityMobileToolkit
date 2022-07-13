@@ -52,7 +52,7 @@ MonoBehaviour:
     m_Metadata:
       m_Items: []
   - m_Id: 359499884937216
-    m_Key: Reset_ap
+    m_Key: Reset
     m_Metadata:
       m_Items: []
   - m_Id: 359638385049600
@@ -98,10 +98,11 @@ MonoBehaviour:
   m_Metadata:
     m_Items: []
   m_KeyGenerator:
-    id: 0
+    rid: 0
   references:
-    version: 1
-    00000000:
+    version: 2
+    RefIds:
+    - rid: 0
       type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
       data:
         m_CustomEpoch: 1641471506323
